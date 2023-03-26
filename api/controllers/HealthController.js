@@ -7,7 +7,7 @@
 
 module.exports = {
   health: function (req, res) {
-    return res.ok({ status: 'ok' });
+    return res.ok({ status: 'Made by Alcoholics for Alcoholics' });
   }
 
 };
