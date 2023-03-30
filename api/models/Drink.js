@@ -1,5 +1,5 @@
 /**
- * Printer.js
+ * Drink.js
  *
  * @description :: A model definition represents a database table/collection.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -11,7 +11,10 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-    ip: { type: "string", required: true },
+    name: { type: "string", required: true },
+    steps: { type: "json", required: true },
+    materials: { type: "json", required: true },
+    description: { type: "string" },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
