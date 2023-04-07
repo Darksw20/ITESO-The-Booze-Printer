@@ -25,8 +25,28 @@ module.exports.bootstrap = async function () {
       password: "qwerty123456",
       email: "ry@example.com",
     },
+  ]);
 
-    // etc.
+  await DeviceType.createEach([
+    {
+      name: "Alexa Gen. 2",
+      company: "Amazon",
+    },
+    {
+      name: "Google Assistant",
+      company: "Google",
+    },
+  ]);
+
+  await MaterialType.createEach([
+    {
+      name: "Tequila",
+      alterNames: ["Jose Cuervo"],
+    },
+    {
+      name: "Ron",
+      alterNames: ["Kraken"],
+    },
   ]);
   // ```
 };
