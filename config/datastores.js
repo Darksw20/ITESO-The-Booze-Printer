@@ -13,9 +13,4 @@
  * https://sailsjs.com/config/datastores
  */
 
-module.exports.datastores = {
-  default: {
-    adapter: require("sails-mysql"),
-    url: "mysql://root:password@127.0.0.1:3306/tbp",
-  },
-};
+module.exports.datastores = {};
