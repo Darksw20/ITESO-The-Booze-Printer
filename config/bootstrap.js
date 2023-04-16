@@ -15,38 +15,38 @@ module.exports.bootstrap = async function () {
   // For example:
   // ```
   // Set up fake development data (or if we already have some, avast)
-  //if ((await User.count()) > 0) {
-  //  return;
-  //}
-  //
-  //await User.createEach([
-  //  {
-  //    username: "Ryan Dahl",
-  //    password: "qwerty123456",
-  //    email: "ry@example.com",
-  //  },
-  //]);
-  //
-  //await DeviceType.createEach([
-  //  {
-  //    name: "Alexa Gen. 2",
-  //    company: "Amazon",
-  //  },
-  //  {
-  //    name: "Google Assistant",
-  //    company: "Google",
-  //  },
-  //]);
-  //
-  //await MaterialType.createEach([
-  //  {
-  //    name: "Tequila",
-  //    alterNames: ["Jose Cuervo"],
-  //  },
-  //  {
-  //    name: "Ron",
-  //    alterNames: ["Kraken"],
-  //  },
-  //]);
+  if ((await User.count()) > 0) {
+    return;
+  }
+
+  await User.createEach([
+    {
+      username: "Ryan Dahl",
+      password: "qwerty123456",
+      email: "ry@example.com",
+    },
+  ]);
+
+  await DeviceType.createEach([
+    {
+      name: "Alexa Gen. 2",
+      company: "Amazon",
+    },
+    {
+      name: "Google Assistant",
+      company: "Google",
+    },
+  ]);
+
+  await MaterialType.createEach([
+    {
+      name: "Tequila",
+      alterNames: ["Jose Cuervo"],
+    },
+    {
+      name: "Ron",
+      alterNames: ["Kraken"],
+    },
+  ]);
   // ```
 };
