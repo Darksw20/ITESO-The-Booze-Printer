@@ -6,7 +6,12 @@
  */
 
 module.exports = {
-  
-
+  find: async (req, res) => {
+    const query = await User.find({
+      where: req.query,
+    });
+    return res.json({
+      data: query,
+    });
+  },
 };
-

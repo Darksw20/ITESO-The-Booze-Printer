@@ -6,7 +6,12 @@
  */
 
 module.exports = {
-  
-
+  find: async (req, res) => {
+    const query = await Printer.find({
+      where: req.query,
+    });
+    return res.json({
+      data: query,
+    });
+  },
 };
-
