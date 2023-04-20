@@ -18,7 +18,7 @@ module.exports = {
           printers: printerCode,
         });
 
-      return res.json({ data: user.id });
+      return res.json({ data: user });
     } catch (err) {
       return res.serverError(err);
     }
