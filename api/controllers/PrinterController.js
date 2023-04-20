@@ -14,4 +14,19 @@ module.exports = {
       data: query,
     });
   },
+
+  findLike: async (req, res) => {
+    const where = {};
+    for (const key in req.query) {
+      if (typeof req.query[key] === "string") {
+        where[key] = { contains: req.query[key] };
+      } else {
+        where[key] = req.query[key];
+      }
+    }
+    const query = await Printer.find({ where });
+    return res.json({
+      data: query,
+    });
+  },
 };

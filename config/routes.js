@@ -9,9 +9,18 @@
  */
 
 module.exports.routes = {
-  'GET /health': {
-    controller: 'HealthController',
-    action: 'health'
-  }
+  "GET /health": {
+    controller: "HealthController",
+    action: "health",
+  },
 
+  "GET /user/like": {
+    controller: "UserController",
+    action: "findLike",
+  },
+
+  "GET /printer/like": {
+    controller: "PrinterController",
+    action: "findLike",
+  },
 };
