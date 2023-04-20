@@ -23,4 +23,9 @@ module.exports.routes = {
     controller: "PrinterController",
     action: "findLike",
   },
+
+  "GET /connection/:printerCode": {
+    controller: "ConnectionController",
+    action: "findUserWithPrinter",
+  },
 };

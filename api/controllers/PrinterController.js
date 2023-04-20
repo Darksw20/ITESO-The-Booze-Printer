@@ -15,6 +15,13 @@ module.exports = {
     });
   },
 
+  create: async (req, res) => {
+    const newPrinter = await Printer.create(req.body).fetch();
+    return res.json({
+      data: newPrinter,
+    });
+  },
+
   findLike: async (req, res) => {
     const where = {};
     for (const key in req.query) {

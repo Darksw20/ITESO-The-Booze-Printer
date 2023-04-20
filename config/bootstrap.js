@@ -48,5 +48,25 @@ module.exports.bootstrap = async function () {
       alterNames: ["Kraken"],
     },
   ]);
+
+  await Device.createEach([
+    {
+      uuid: "dsadsa-dsadsa-dsadsa-dsadsa",
+      status: "online",
+      ip: "127.12.12.12",
+      device: 1,
+    },
+  ]);
+
+  await Session.createEach([{ ip: "127.12.12.12" }]);
+
+  await Connection.createEach([
+    {
+      devices: 1,
+      printers: 1,
+      users: 1,
+      sessions: 1,
+    },
+  ]);
   // ```
 };
