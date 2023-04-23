@@ -28,4 +28,9 @@ module.exports.routes = {
     controller: "ConnectionController",
     action: "findUserWithPrinter",
   },
+
+  "POST /prompt/order-drink": {
+    controller: "PromptController",
+    action: "askDrink",
+  },
 };
