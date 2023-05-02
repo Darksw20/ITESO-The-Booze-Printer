@@ -33,4 +33,9 @@ module.exports.routes = {
     controller: "PromptController",
     action: "askDrink",
   },
+
+  "GET /drink/availability": {
+    controller: "DrinkController",
+    action: "checkAvailability",
+  },
 };

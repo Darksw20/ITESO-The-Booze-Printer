@@ -6,23 +6,40 @@
  */
 
 module.exports = {
-  find: async (req, res) => {
+  checkAvailability: async (req, res) => {
     const query = await Drink.findOne({
-      where: req.query,
+      where: { name: req.query.name, customer: req.query.customer },
     });
 
     const hasRecipie = query ? true : false;
 
     if (hasRecipie) {
-      const materials = query.materials;
+      const requiredMaterials = query.materials;
+      const availableMaterials = await Material.find({
+        where: { printer: req.query.printerCode }
+      });
 
+      const insufficientMaterials = [];
 
+      for (const material of requiredMaterials) {
+        const availableMaterial = availableMaterials.find(m => m.name.includes(material.name));
+        if (!availableMaterial || parseFloat(availableMaterial.currentQuantity) < parseFloat(material.amount.split(" ")[0])) {
+          insufficientMaterials.push(material);
+        }
+      }
+
+      return res.json({
+        data: {
+          hasRecipie,
+          recipie: query,
+          emptyMaterials: insufficientMaterials
+        },
+      });
     }
-
     return res.json({
       data: {
         hasRecipie,
-        recipie: query
+        recipie: query,
       },
     });
   },
