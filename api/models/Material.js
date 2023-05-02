@@ -12,8 +12,9 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
     name: { type: "string", required: true },
-    originalQuantity: { type: "string", required: true },
-    actualQuantity: { type: "string", required: true },
+    //is in mililiters
+    originalQuantity: { type: "number", required: true, columnType: "FLOAT" },
+    currentQuantity: { type: "number", required: true, columnType: "FLOAT" },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -22,6 +23,9 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+    printer: {
+      model: "Printer"
+    },
     material: {
       model: "materialType",
     },

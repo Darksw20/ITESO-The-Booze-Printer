@@ -21,6 +21,11 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
+    materials: {
+      collection: "material",
+      via: "printer",
+    },
+
     connections: {
       collection: "connection",
       via: "printers",
