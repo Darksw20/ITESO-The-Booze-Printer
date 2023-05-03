@@ -34,6 +34,11 @@ module.exports.routes = {
     action: "askDrink",
   },
 
+  "POST /order/start": {
+    controller: "OrderController",
+    action: "startOrder",
+  },
+
   "GET /drink/availability": {
     controller: "DrinkController",
     action: "checkAvailability",

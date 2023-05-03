@@ -1,25 +1,22 @@
 const { Configuration, OpenAIApi } = require("openai");
 
 module.exports = {
-
-  friendlyName: 'Ask Chat GPT for something',
-  description: 'This will be the interface to ask various things to Chat GPT',
+  friendlyName: "Ask Chat GPT for something",
+  description: "This will be the interface to ask various things to Chat GPT",
 
   inputs: {
     history: {
       type: "ref",
       required: true,
       description: "The prompt to send to chatgpt",
-    }
+    },
   },
 
   exits: {
     success: {
-      description: 'All done.',
+      description: "All done.",
     },
-
   },
-
 
   fn: async function (inputs, exits) {
     console.log(`ask-gpt: 
@@ -43,10 +40,11 @@ module.exports = {
       console.log(JSON.stringify(completion.data));
 
       const firstString = completionText.substring(completionText.indexOf("{"));
-      const jsonResponse = JSON.parse(firstString.slice(0, firstString.lastIndexOf('}') + 1));
+      const jsonResponse = JSON.parse(
+        firstString.slice(0, firstString.lastIndexOf("}") + 1)
+      );
 
       return exits.success(jsonResponse);
-
     } catch (error) {
       if (error.response) {
         console.log(error.response.status);
@@ -54,8 +52,7 @@ module.exports = {
       } else {
         console.log(error.message);
       }
+      return exits.error(error.message);
     }
-
-  }
+  },
 };
-
