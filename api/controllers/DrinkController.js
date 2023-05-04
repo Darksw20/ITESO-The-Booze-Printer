@@ -12,34 +12,32 @@ module.exports = {
     });
 
     const hasRecipie = query ? true : false;
+    const insufficientMaterials = [];
 
     if (hasRecipie) {
       const requiredMaterials = query.materials;
       const availableMaterials = await Material.find({
-        where: { printer: req.query.printerCode }
+        where: { printer: req.query.printerCode },
       });
 
-      const insufficientMaterials = [];
-
       for (const material of requiredMaterials) {
-        const availableMaterial = availableMaterials.find(m => m.name.includes(material.name));
-        if (!availableMaterial || parseFloat(availableMaterial.currentQuantity) < parseFloat(material.amount.split(" ")[0])) {
+        const availableMaterial = availableMaterials.find((m) =>
+          m.name.includes(material.name)
+        );
+        if (
+          !availableMaterial ||
+          parseFloat(availableMaterial.currentQuantity) <
+            parseFloat(material.amount.split(" ")[0])
+        ) {
           insufficientMaterials.push(material);
         }
       }
-
-      return res.json({
-        data: {
-          hasRecipie,
-          recipie: query,
-          emptyMaterials: insufficientMaterials
-        },
-      });
     }
     return res.json({
       data: {
         hasRecipie,
-        recipie: query,
+        recipie: query ? query.id : false,
+        emptyMaterials: insufficientMaterials ? insufficientMaterials : false,
       },
     });
   },

@@ -8,37 +8,73 @@ const context = `Your task is to check the list of available alcohol and adjust 
 
 module.exports = {
   startOrder: async (req, res) => {
-    const { drink, availableAlcohol, cup, language, connection } = req.body;
-
+    let steps = [];
+    const { connection, hasRecipie, recipie, emptyMaterials } = req.body;
     const order = await Order.create({
       status: "pending",
       shotNumber: 1,
       connection: connection,
     }).fetch();
+    try {
+      if (hasRecipie) {
+        const drinkRecipie = await Drink.findOne({
+          where: { id: recipie },
+        });
+        steps = drinkRecipie.steps;
+      } else {
+        const orderPrompt = `Here is the input: 
+        {
+          "drink": "${recipie.drink}",
+          "available_alcohol": ${JSON.stringify(recipie.availableAlcohol)},
+          "cup": "${recipie.cup}",
+          "language": "${recipie.language}"
+        }`;
 
-    const orderPrompt = `Here is the input: 
-    {
-        "drink": "${drink}",
-        "available_alcohol": ${JSON.stringify(availableAlcohol)},
-        "cup": "${cup}",
-        "language": "${language}"
-    }`;
+        const result = await sails.helpers.askGpt([
+          { role: "system", content: context },
+          { role: "user", content: orderPrompt },
+        ]);
 
-    console.log("orderPrompt", orderPrompt);
+        await Prompt.create({
+          prompt: orderPrompt,
+          result: result,
+          order: order.id,
+        }).fetch();
 
-    const result = await sails.helpers.askGpt([
-      { role: "system", content: context },
-      { role: "user", content: orderPrompt },
-    ]);
+        steps = result.ingredients;
+      }
 
-    const prompt = await Prompt.create({
-      prompt: orderPrompt,
-      result: result,
-      order: order.id,
-    }).fetch();
+      console.log(steps);
 
-    return res.json({
-      data: prompt,
-    });
+      await Order.update({ id: order.id }).set({
+        status: "ready",
+      });
+
+      const message = await sails.helpers.sendAwsNotification({
+        channel: "ESP_32/orders",
+        steps,
+      });
+
+      await Order.update({ id: order.id }).set({
+        status: "Served",
+      });
+
+      return res.json({
+        data: message,
+      });
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.status);
+        console.log(error.response.data);
+      } else {
+        console.log(error.message);
+      }
+      await Order.update({ id: order.id }).set({
+        status: "Failed",
+      });
+      return res.json({
+        data: error,
+      });
+    }
   },
 };

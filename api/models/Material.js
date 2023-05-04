@@ -13,6 +13,7 @@ module.exports = {
 
     name: { type: "string", required: true },
     //is in mililiters
+    slot: { type: "number", required: true },
     originalQuantity: { type: "number", required: true, columnType: "FLOAT" },
     currentQuantity: { type: "number", required: true, columnType: "FLOAT" },
 
@@ -24,7 +25,7 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     printer: {
-      model: "Printer"
+      model: "Printer",
     },
     material: {
       model: "materialType",
