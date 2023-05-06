@@ -94,32 +94,14 @@ module.exports.bootstrap = async function () {
     {
       name: "margarita",
       steps: [
-        {
-          name: "tequila",
-          amount: "30 ml",
-        },
-        {
-          name: "blue curacao",
-          amount: "15 ml",
-        },
-        {
-          name: "grenadine",
-          amount: "5 ml",
-        },
+        { name: "tequila", amount: "30 ml" },
+        { name: "triple sec", amount: "15 ml" },
+        { name: "lime juice", amount: "30 ml" },
       ],
       materials: [
-        {
-          name: "tequila",
-          amount: "30 ml",
-        },
-        {
-          name: "blue curacao",
-          amount: "15 ml",
-        },
-        {
-          name: "grenadine",
-          amount: "5 ml",
-        },
+        { name: "tequila", amount: "30 ml" },
+        { name: "triple sec", amount: "15 ml" },
+        { name: "lime juice", amount: "30 ml" },
       ],
       description:
         "Primero, añade 30 ml de tequila al shot. Luego, añade 15 ml de blue curacao. Por último, agrega 5 ml de grenadine. Sirve en un shot de 60 ml. ¡Salud!",
