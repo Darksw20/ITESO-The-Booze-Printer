@@ -20,8 +20,8 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     console.log(`ask-gpt: 
-        [apiKey]=${process.env.OPENAI_API_KEY}\n
-        [history]=${JSON.stringify(inputs.history)}\n
+        [apiKey] = ${process.env.OPENAI_API_KEY}\n
+        [history] = ${JSON.stringify(inputs.history)}\n
     `);
     const configuration = new Configuration({
       apiKey: process.env.OPENAI_API_KEY,

@@ -243,8 +243,8 @@ module.exports = {
      *                                                                          *
      ***************************************************************************/
     onlyAllowOrigins: [
-      'http://18.216.99.159',
-      'http://ec2-18-216-99-159.us-east-2.compute.amazonaws.com',
+      "http://18.216.99.159",
+      "http://ec2-18-216-99-159.us-east-2.compute.amazonaws.com",
     ],
     /***************************************************************************
      *                                                                          *
@@ -353,7 +353,8 @@ module.exports = {
   custom: {
     baseUrl: "https://example.com",
     internalEmailAddress: "support@example.com",
-    openAiKey: process.env.OPENAI_API_KEY
+    openAiKey: process.env.OPENAI_API_KEY,
+    iotCoreEndpoint: process.env.IOT_CORE_ENDPOINT,
 
     // sendgridSecret: 'SG.fake.3e0Bn0qSQVnwb1E4qNPz9JZP5vLZYqjh7sn8S93oSHU',
     // stripeSecret: 'sk_prod__fake_Nfgh82401348jaDa3lkZ0d9Hm',

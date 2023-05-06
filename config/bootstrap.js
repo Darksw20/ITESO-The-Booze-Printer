@@ -73,7 +73,7 @@ module.exports.bootstrap = async function () {
 
   await Material.createEach([
     {
-      name: "Jose Cuervo Reposado",
+      name: "Tequila Jose Cuervo Reposado",
       slot: 1,
       originalQuantity: 1000,
       currentQuantity: 500,

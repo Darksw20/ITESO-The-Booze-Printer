@@ -1,3 +1,5 @@
+const AWS = require("aws-sdk");
+
 module.exports = {
   friendlyName: "Send MQTT aws notification",
 
@@ -23,6 +25,38 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    // TODO
+    console.log(`sendNotification:
+      [channel] = ${inputs.channel}
+      [steps] = ${JSON.stringify(inputs.steps)}
+    `);
+
+    try {
+      const iotData = new AWS.IotData({
+        endpoint: process.env.IOT_CORE_ENDPOINT,
+      });
+
+      const params = {
+        topic: inputs.channel,
+        payload: JSON.stringify({ message: "Hello, world!" }),
+        qos: 0,
+      };
+
+      iotData.publish(params, (err, data) => {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log("Message published:", data);
+        }
+      });
+      return exits.success("hello");
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.status);
+        console.log(error.response.data);
+      } else {
+        console.log(error.message);
+      }
+      return exits.error(error.message);
+    }
   },
 };
