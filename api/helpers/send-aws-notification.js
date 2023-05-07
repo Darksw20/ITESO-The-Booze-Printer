@@ -1,4 +1,4 @@
-const AWS = require("aws-sdk");
+const awsIot = require("aws-iot-device-sdk");
 
 module.exports = {
   friendlyName: "Send MQTT aws notification",
@@ -31,23 +31,30 @@ module.exports = {
     `);
 
     try {
-      const iotData = new AWS.IotData({
-        endpoint: process.env.IOT_CORE_ENDPOINT,
+      const device = awsIot.device({
+        clientId: inputs.channel,
+        host: process.env.IOT_CORE_ENDPOINT,
+        port: 8883,
+        keyPath: process.env.INIT_CWD + "/AWS_secrets/private.pem.key",
+        certPath: process.env.INIT_CWD + "/AWS_secrets/certificate.pem.crt",
+        caPath: process.env.INIT_CWD + "/AWS_secrets/AmazonRootCA1.cer",
       });
 
       const params = {
         topic: inputs.channel,
-        payload: JSON.stringify({ message: "Hello, world!" }),
+        payload: JSON.stringify(inputs.steps),
         qos: 0,
       };
 
-      iotData.publish(params, (err, data) => {
-        if (err) {
-          console.error(err);
-        } else {
-          console.log("Message published:", data);
-        }
+      device.on("connect", () => {
+        console.log("connecting");
+        device.publish(inputs.channel, JSON.stringify(params));
       });
+
+      device.on("message", (topic, payload) => {
+        console.log("message", topic, payload.toString());
+      });
+
       return exits.success("hello");
     } catch (error) {
       if (error.response) {

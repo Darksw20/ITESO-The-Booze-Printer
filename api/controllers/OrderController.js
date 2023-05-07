@@ -9,12 +9,19 @@ const context = `Your task is to check the list of available alcohol and adjust 
 module.exports = {
   startOrder: async (req, res) => {
     let steps = [];
-    const { connection, hasRecipie, recipie, emptyMaterials } = req.body;
+    const { connection, hasRecipie, recipie, drinkName, cupSize } = req.body;
     const order = await Order.create({
       status: "pending",
       shotNumber: 1,
       connection: connection,
     }).fetch();
+
+    const conQuery = await Connection.findOne({
+      where: { id: connection },
+    })
+      .populate("users")
+      .populate("printers");
+
     try {
       if (hasRecipie) {
         const drinkRecipie = await Drink.findOne({
@@ -22,18 +29,34 @@ module.exports = {
         });
         steps = drinkRecipie.steps;
       } else {
-        const orderPrompt = `Here is the input: 
-        {
-          "drink": "${recipie.drink}",
-          "available_alcohol": ${JSON.stringify(recipie.availableAlcohol)},
-          "cup": "${recipie.cup}",
-          "language": "${recipie.language}"
-        }`;
+        const availableMaterials = await Material.find({
+          where: { printer: conQuery.printers.id },
+          select: ["name", "currentQuantity", "slot"],
+        });
 
-        const result = await sails.helpers.askGpt([
-          { role: "system", content: context },
-          { role: "user", content: orderPrompt },
-        ]);
+        const promptMaterials = {};
+        for (const material of availableMaterials) {
+          promptMaterials[material.name] = material.currentQuantity + " ml";
+        }
+        const orderPrompt = `Here is the input: {'drink': '${drinkName}','available_alcohol': ${JSON.stringify(
+          promptMaterials,
+          null,
+          0
+        )}, 'cup': '${cupSize}', 'language': 'ES_MX' }`;
+
+        // const result = await sails.helpers.askGpt([
+        //   { role: "system", content: context },
+        //   { role: "user", content: orderPrompt },
+        // ]);
+        console.log(orderPrompt);
+        const result = {
+          ingredients: [
+            {
+              name: "tequila",
+              amount: "30 ml",
+            },
+          ],
+        };
 
         await Prompt.create({
           prompt: orderPrompt,
@@ -44,16 +67,13 @@ module.exports = {
         steps = result.ingredients;
       }
 
-      console.log(steps);
-
       await Order.update({ id: order.id }).set({
         status: "ready",
       });
-
-      const message = await sails.helpers.sendAwsNotification({
-        channel: "ESP_32/orders",
-        steps,
-      });
+      const message = await sails.helpers.sendAwsNotification(
+        "ESP_32/orders",
+        steps
+      );
 
       await Order.update({ id: order.id }).set({
         status: "Served",

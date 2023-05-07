@@ -16,16 +16,17 @@ module.exports = {
       .populate("printers");
 
     const query = await Drink.findOne({
-      where: { name, customer: conQuery.id },
+      where: { name, customer: conQuery.users.id },
     });
 
     const hasRecipie = query ? true : false;
     const insufficientMaterials = [];
+    const sufficientMaterials = [];
 
     if (hasRecipie) {
       const requiredMaterials = query.materials;
       const availableMaterials = await Material.find({
-        where: { printer: conQuery.id },
+        where: { printer: conQuery.printers.id },
       });
 
       for (const material of requiredMaterials) {
@@ -39,6 +40,8 @@ module.exports = {
           (neededAmount < cup && neededAmount < currentAmount)
         ) {
           insufficientMaterials.push(material);
+        } else {
+          sufficientMaterials.push(material);
         }
       }
     }
@@ -46,7 +49,10 @@ module.exports = {
       data: {
         hasRecipie,
         recipie: query ? query.id : false,
-        emptyMaterials: insufficientMaterials ? insufficientMaterials : false,
+        availableMaterialLength: sufficientMaterials.length,
+        emptyMaterialLength: insufficientMaterials.length,
+        availableMaterials: sufficientMaterials,
+        emptyMaterials: insufficientMaterials,
       },
     });
   },

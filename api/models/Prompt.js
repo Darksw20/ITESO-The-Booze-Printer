@@ -10,7 +10,7 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-    prompt: { type: "string", required: true },
+    prompt: { type: "string", columnType: "varchar(512)", required: true },
     result: { type: "json" },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

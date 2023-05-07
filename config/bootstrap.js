@@ -47,6 +47,22 @@ module.exports.bootstrap = async function () {
       name: "Ron",
       alterNames: ["Kraken"],
     },
+    {
+      name: "Gin",
+      alterNames: ["Gin"],
+    },
+    {
+      name: "Jugo de limon",
+      alterNames: ["Lemon Juice"],
+    },
+    {
+      name: "Squirt",
+      alterNames: ["Squirt"],
+    },
+    {
+      name: "Coca cola",
+      alterNames: ["Coca cola"],
+    },
   ]);
 
   await Device.createEach([
@@ -87,6 +103,38 @@ module.exports.bootstrap = async function () {
       currentQuantity: 1000,
       printer: 1,
       material: 2,
+    },
+    {
+      name: "Gin Gin",
+      slot: 3,
+      originalQuantity: 1000,
+      currentQuantity: 1000,
+      printer: 1,
+      material: 3,
+    },
+    {
+      name: "Jugo de limon",
+      slot: 4,
+      originalQuantity: 1000,
+      currentQuantity: 1000,
+      printer: 1,
+      material: 4,
+    },
+    {
+      name: "Squirt",
+      slot: 5,
+      originalQuantity: 1000,
+      currentQuantity: 1000,
+      printer: 1,
+      material: 5,
+    },
+    {
+      name: "Coca cola",
+      slot: 6,
+      originalQuantity: 1000,
+      currentQuantity: 1000,
+      printer: 1,
+      material: 6,
     },
   ]);
 
