@@ -40,10 +40,15 @@ module.exports = {
         caPath: process.env.INIT_CWD + "/AWS_secrets/AmazonRootCA1.cer",
       });
 
+      const orders = await Order.find({
+        where: { status: "ready" },
+      });
+
+      console.log(orders);
+
       const params = {
-        topic: inputs.channel,
-        payload: JSON.stringify(inputs.steps),
-        qos: 0,
+        printer: 1,
+        steps: JSON.stringify(inputs.steps),
       };
 
       device.on("connect", () => {
@@ -55,7 +60,7 @@ module.exports = {
         console.log("message", topic, payload.toString());
       });
 
-      return exits.success("hello");
+      return exits.success(params);
     } catch (error) {
       if (error.response) {
         console.log(error.response.status);

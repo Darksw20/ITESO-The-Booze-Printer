@@ -5,9 +5,34 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
+const validateMaterials = (requiredMaterials, availableMaterials, cup) => {
+  const insufficientMaterials = [];
+  const sufficientMaterials = [];
+
+  for (const material of requiredMaterials) {
+    const availableMaterial = availableMaterials.find((m) => {
+      const name = Object.keys(material)[0];
+      return m.name?.toLowerCase().includes(name?.toLowerCase());
+    });
+    const neededAmount = parseFloat(availableMaterial?.currentQuantity);
+    const currentAmount = parseFloat(material.amount?.split(" ")[0]);
+    if (
+      !availableMaterial ||
+      (neededAmount < cup && neededAmount < currentAmount)
+    ) {
+      insufficientMaterials.push(material);
+    } else {
+      sufficientMaterials.push(material);
+    }
+  }
+  return { insufficientMaterials, sufficientMaterials };
+};
+
 module.exports = {
   checkAvailability: async (req, res) => {
     const { name, connection, cup } = req.query;
+
+    let result;
 
     const conQuery = await Connection.findOne({
       where: { id: connection },
@@ -15,44 +40,28 @@ module.exports = {
       .populate("users")
       .populate("printers");
 
-    const query = await Drink.findOne({
+    const recipie = await Drink.findOne({
       where: { name, customer: conQuery.users.id },
     });
 
-    const hasRecipie = query ? true : false;
-    const insufficientMaterials = [];
-    const sufficientMaterials = [];
+    const hasRecipie = recipie ? true : false;
 
     if (hasRecipie) {
-      const requiredMaterials = query.materials;
+      const requiredMaterials = recipie.materials;
       const availableMaterials = await Material.find({
         where: { printer: conQuery.printers.id },
       });
 
-      for (const material of requiredMaterials) {
-        const availableMaterial = availableMaterials.find((m) =>
-          m.name.toLowerCase().includes(material.name.toLowerCase())
-        );
-        const neededAmount = parseFloat(availableMaterial?.currentQuantity);
-        const currentAmount = parseFloat(material.amount.split(" ")[0]);
-        if (
-          !availableMaterial ||
-          (neededAmount < cup && neededAmount < currentAmount)
-        ) {
-          insufficientMaterials.push(material);
-        } else {
-          sufficientMaterials.push(material);
-        }
-      }
+      result = validateMaterials(requiredMaterials, availableMaterials, cup);
     }
     return res.json({
       data: {
         hasRecipie,
-        recipie: query ? query.id : false,
-        availableMaterialLength: sufficientMaterials.length,
-        emptyMaterialLength: insufficientMaterials.length,
-        availableMaterials: sufficientMaterials,
-        emptyMaterials: insufficientMaterials,
+        recipie: recipie ? recipie.id : false,
+        availableMaterialLength: result.sufficientMaterials.length,
+        emptyMaterialLength: result.insufficientMaterials.length,
+        availableMaterials: result.sufficientMaterials,
+        emptyMaterials: result.insufficientMaterials,
       },
     });
   },

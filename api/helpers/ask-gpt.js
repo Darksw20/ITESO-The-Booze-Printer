@@ -32,12 +32,15 @@ module.exports = {
 
     try {
       const completion = await openai.createChatCompletion({
+        // model: "gpt-4",
         model: "gpt-3.5-turbo",
         messages: messages,
       });
 
       const completionText = completion.data.choices[0].message.content;
-      console.log(JSON.stringify(completion.data));
+      console.log("[usage]", JSON.stringify(completion.data.usage));
+      console.log("[response]", JSON.stringify(completion.data.choices[0]));
+      console.log("[content]", JSON.stringify(completionText));
 
       const firstString = completionText.substring(completionText.indexOf("{"));
       const jsonResponse = JSON.parse(

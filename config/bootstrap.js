@@ -142,14 +142,14 @@ module.exports.bootstrap = async function () {
     {
       name: "margarita",
       steps: [
-        { name: "tequila", amount: "30 ml" },
-        { name: "triple sec", amount: "15 ml" },
-        { name: "lime juice", amount: "30 ml" },
+        { id: 1, slot: 1, amount: "60 ml" },
+        { id: 4, slot: 4, amount: "30 ml" },
+        { id: 5, slot: 5, amount: "60 ml" },
       ],
       materials: [
-        { name: "tequila", amount: "30 ml" },
-        { name: "triple sec", amount: "15 ml" },
-        { name: "lime juice", amount: "30 ml" },
+        { "Tequila Jose Cuervo Reposado": "60 ml" },
+        { "Jugo de limon": "30 ml" },
+        { Squirt: "60 ml" },
       ],
       description:
         "Primero, añade 30 ml de tequila al shot. Luego, añade 15 ml de blue curacao. Por último, agrega 5 ml de grenadine. Sirve en un shot de 60 ml. ¡Salud!",
@@ -157,20 +157,10 @@ module.exports.bootstrap = async function () {
     },
     {
       name: "tequila shot",
-      steps: [
-        {
-          name: "tequila",
-          amount: "30 ml",
-        },
-      ],
-      materials: [
-        {
-          name: "tequila",
-          amount: "30 ml",
-        },
-      ],
+      steps: [{ id: 1, slot: 1, amount: "60 ml" }],
+      materials: [{ "Tequila Jose Cuervo Reposado": "60 ml" }],
       description:
-        "Primero, añade 30 ml de tequila al shot. Luego, añade 15 ml de blue curacao. Por último, agrega 5 ml de grenadine. Sirve en un shot de 60 ml. ¡Salud!",
+        "En un vaso sirve 60 ml de Tequila Jose Cuervo Reposado. Agrega 10 ml de Jugo de limon. Servir y disfrutar.",
       customer: 1,
     },
   ]);
