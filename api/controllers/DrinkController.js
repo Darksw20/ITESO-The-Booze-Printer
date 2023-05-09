@@ -35,8 +35,6 @@ module.exports = {
   checkAvailability: async (req, res) => {
     const { name, connection, cup } = req.query;
 
-    let result;
-
     const conQuery = await Connection.findOne({
       where: { id: connection },
     })
@@ -55,17 +53,30 @@ module.exports = {
         where: { printer: conQuery.printers.id },
       });
 
-      result = validateMaterials(requiredMaterials, availableMaterials, cup);
-      console.log(result);
+      const result = validateMaterials(
+        requiredMaterials,
+        availableMaterials,
+        cup
+      );
+      return res.json({
+        data: {
+          hasRecipie,
+          recipie: recipie.id,
+          availableMaterialLength: result.sufficient.length,
+          emptyMaterialLength: result.insufficient.length,
+          availableMaterials: result.sufficient,
+          emptyMaterials: result.insufficient,
+        },
+      });
     }
     return res.json({
       data: {
         hasRecipie,
-        recipie: recipie ? recipie.id : false,
-        availableMaterialLength: result.sufficient.length,
-        emptyMaterialLength: result.insufficient.length,
-        availableMaterials: result.sufficient,
-        emptyMaterials: result.insufficient,
+        recipie: false,
+        availableMaterialLength: 0,
+        emptyMaterialLength: 0,
+        availableMaterials: [],
+        emptyMaterials: [],
       },
     });
   },
