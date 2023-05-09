@@ -56,6 +56,7 @@ module.exports = {
       });
 
       result = validateMaterials(requiredMaterials, availableMaterials, cup);
+      console.log(result);
     }
     return res.json({
       data: {
