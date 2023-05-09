@@ -25,7 +25,10 @@ const validateMaterials = (requiredMaterials, availableMaterials, cup) => {
       sufficientMaterials.push(material);
     }
   }
-  return { insufficientMaterials, sufficientMaterials };
+  return {
+    insufficient: insufficientMaterials ?? [],
+    sufficient: sufficientMaterials ?? [],
+  };
 };
 
 module.exports = {
@@ -58,10 +61,10 @@ module.exports = {
       data: {
         hasRecipie,
         recipie: recipie ? recipie.id : false,
-        availableMaterialLength: result.sufficientMaterials.length,
-        emptyMaterialLength: result.insufficientMaterials.length,
-        availableMaterials: result.sufficientMaterials,
-        emptyMaterials: result.insufficientMaterials,
+        availableMaterialLength: result.sufficient.length,
+        emptyMaterialLength: result.insufficient.length,
+        availableMaterials: result.sufficient,
+        emptyMaterials: result.insufficient,
       },
     });
   },
