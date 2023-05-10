@@ -5,7 +5,11 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
-const validateMaterials = (requiredMaterials, availableMaterials, cup) => {
+const validateMaterials = (
+  requiredMaterials,
+  availableMaterials,
+  cup = null
+) => {
   const insufficientMaterials = [];
   const sufficientMaterials = [];
 
@@ -17,6 +21,7 @@ const validateMaterials = (requiredMaterials, availableMaterials, cup) => {
 
     if (
       !availableMaterial ||
+      !cup ||
       availableMaterial.currentQuantity <
         Math.max(cup, parseFloat(material.amount))
     ) {
