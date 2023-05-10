@@ -40,8 +40,6 @@ module.exports = {
         caPath: `${process.env.HOME}/AWS_secrets/AmazonRootCA1.cer`,
       });
 
-      console.log(process.env.PWD);
-
       const orders = await Order.find({
         where: { status: "ready" },
       });
