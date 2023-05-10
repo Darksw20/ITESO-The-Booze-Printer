@@ -35,10 +35,12 @@ module.exports = {
         clientId: inputs.channel,
         host: process.env.IOT_CORE_ENDPOINT,
         port: 8883,
-        keyPath: `${process.env.PWD}/AWS_secrets/private.pem.key`,
-        certPath: `${process.env.PWD}/AWS_secrets/certificate.pem.crt`,
-        caPath: `${process.env.PWD}/AWS_secrets/AmazonRootCA1.cer`,
+        keyPath: `${process.env.HOME}/AWS_secrets/private.pem.key`,
+        certPath: `${process.env.HOME}/AWS_secrets/certificate.pem.crt`,
+        caPath: `${process.env.HOME}/AWS_secrets/AmazonRootCA1.cer`,
       });
+
+      console.log(process.env.PWD);
 
       const orders = await Order.find({
         where: { status: "ready" },
