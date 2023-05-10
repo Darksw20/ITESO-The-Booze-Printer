@@ -48,8 +48,8 @@ module.exports = {
     ]);
 
     if (
-      result.ingredients.includes("null") ||
-      result.ingredients.includes("undefined")
+      JSON.stringify(result.ingredients).includes("null") ||
+      JSON.stringify(result.ingredients).includes("undefined")
     ) {
       return null;
     }
