@@ -10,7 +10,7 @@ const createPrompt = (availableMaterials, drinkName, cupSize) => {
     return null;
   }
 
-  const context = `Your task is to check the list of available alcohol and adjust the amounts of each alcohol needed for the drink. If any ingredient is not available, you should declare it in the response JSON. Your output will be a JSON object with two parts. The first part will be an array of objects representing the ingredients for the drink, along with the amount of ingredient in milliliters (ml) needed for the drink. The second part will be a string containing the instructions for making the drink, including the order in which the ingredients should be added to the cup, and the total amount of liquid to be served. Here is an example input: { 'drink': 'Tequila Shot', 'available_alcohol': {'tequila': '1000 ml', 'blue curacao': '1000 ml'}, 'cup': '60 ml', 'language': 'ES_MX' }. Example of the response: { ingredients: [ { 'Tequila Jose Cuervo Reposado': '60 ml' }, { 'Jugo de limon': '10 ml' } ], instructions: 'En un vaso sirve 60 ml de Tequila Jose Cuervo Reposado. Agrega 10 ml de Jugo de limon. Servir y disfrutar.' }`;
+  const context = `Your task is to check the list of available alcohol and adjust the amounts of each alcohol needed for the drink. If any ingredient is not available, you should declare it in the response JSON. Your output will be a JSON object with two parts. The first part will be an array of objects representing the ingredients for the drink, along with the amount of ingredient in milliliters (ml) needed for the drink. The second part will be a string containing the instructions for making the drink, including the order in which the ingredients should be added to the cup, and the total amount of liquid to be served. Here is an example input: { 'drink': 'Tequila Shot', 'available_alcohol': {'tequila': '1000 ml', 'blue curacao': '1000 ml'}, 'cup': '60 ml', 'language': 'ES_MX' }. Example of the response if exist the ingredients: { ingredients: [ { 'Tequila Jose Cuervo Reposado': '60 ml' }, { 'Jugo de limon': '10 ml' } ], instructions: 'En un vaso sirve 60 ml de Tequila Jose Cuervo Reposado. Agrega 10 ml de Jugo de limon. Servir y disfrutar.' }. Example of the response if dont exist the ingredients:{ ingredients: null,instructions:null}`;
 
   const promptMaterials = availableMaterials.reduce((acc, curr) => {
     return { ...acc, [curr.name]: `${curr.currentQuantity} ml` };
@@ -46,6 +46,10 @@ module.exports = {
       { role: "system", content: prompts.context },
       { role: "user", content: prompts.prompt },
     ]);
+
+    if (result.ingredients.includes("null")) {
+      return null;
+    }
 
     const filteredMessage = generateMessage(
       availableMaterials,

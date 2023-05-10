@@ -46,6 +46,16 @@ module.exports = {
         );
       }
 
+      if (!steps) {
+        await Order.updateOne({ id: order.id }).set({
+          status: "Unavailable Materials",
+        });
+
+        return res.json({
+          data: "Unavailable Materials",
+        });
+      }
+
       await Order.updateOne({ id: order.id }).set({
         status: "ready",
       });
