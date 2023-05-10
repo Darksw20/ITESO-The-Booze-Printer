@@ -47,6 +47,10 @@ module.exports = {
         firstString.slice(0, firstString.lastIndexOf("}") + 1)
       );
 
+      console.log("[result]", jsonResponse);
+      console.log("[ingredients]", jsonResponse.ingredients);
+      console.log("[instructions]", jsonResponse.instructions);
+
       return exits.success(jsonResponse);
     } catch (error) {
       if (error.response) {

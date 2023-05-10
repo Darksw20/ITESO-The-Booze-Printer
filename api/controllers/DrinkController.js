@@ -10,24 +10,25 @@ const validateMaterials = (requiredMaterials, availableMaterials, cup) => {
   const sufficientMaterials = [];
 
   for (const material of requiredMaterials) {
-    const availableMaterial = availableMaterials.find((m) => {
-      const name = Object.keys(material)[0];
-      return m.name?.toLowerCase().includes(name?.toLowerCase());
-    });
-    const neededAmount = parseFloat(availableMaterial?.currentQuantity);
-    const currentAmount = parseFloat(material.amount?.split(" ")[0]);
+    const name = Object.keys(material)[0].toLowerCase();
+    const availableMaterial = availableMaterials.find((m) =>
+      m.name?.toLowerCase().includes(name)
+    );
+
     if (
       !availableMaterial ||
-      (neededAmount < cup && neededAmount < currentAmount)
+      availableMaterial.currentQuantity <
+        Math.max(cup, parseFloat(material.amount))
     ) {
       insufficientMaterials.push(material);
     } else {
       sufficientMaterials.push(material);
     }
   }
+
   return {
-    insufficient: insufficientMaterials ?? [],
-    sufficient: sufficientMaterials ?? [],
+    insufficient: insufficientMaterials,
+    sufficient: sufficientMaterials,
   };
 };
 
@@ -35,48 +36,49 @@ module.exports = {
   checkAvailability: async (req, res) => {
     const { name, connection, cup } = req.query;
 
-    const conQuery = await Connection.findOne({
+    const connectionObj = await Connection.findOne({
       where: { id: connection },
     })
       .populate("users")
       .populate("printers");
 
-    const recipie = await Drink.findOne({
-      where: { name, customer: conQuery.users.id },
+    const userObj = connectionObj?.users?.id;
+
+    const recipeObj = await Drink.findOne({
+      where: { name, customer: userObj },
     });
 
-    const hasRecipie = recipie ? true : false;
+    const hasRecipe = !!recipeObj;
 
-    if (hasRecipie) {
-      const requiredMaterials = recipie.materials;
-      const availableMaterials = await Material.find({
-        where: { printer: conQuery.printers.id },
-      });
-
-      const result = validateMaterials(
-        requiredMaterials,
-        availableMaterials,
-        cup
-      );
+    if (!hasRecipe) {
       return res.json({
         data: {
-          hasRecipie,
-          recipie: recipie.id,
-          availableMaterialLength: result.sufficient.length,
-          emptyMaterialLength: result.insufficient.length,
-          availableMaterials: result.sufficient,
-          emptyMaterials: result.insufficient,
+          hasRecipe,
+          recipe: false,
+          availableMaterialLength: 0,
+          emptyMaterialLength: 0,
+          availableMaterials: [],
+          emptyMaterials: [],
         },
       });
     }
+
+    const requiredMaterials = recipeObj.materials;
+    const availableMaterials = await Material.find({
+      where: { printer: connectionObj.printers.id },
+    });
+
+    const { insufficient: emptyMaterials, sufficient: sufficientMaterials } =
+      validateMaterials(requiredMaterials, availableMaterials, cup);
+
     return res.json({
       data: {
-        hasRecipie,
-        recipie: false,
-        availableMaterialLength: 0,
-        emptyMaterialLength: 0,
-        availableMaterials: [],
-        emptyMaterials: [],
+        hasRecipe,
+        recipe: recipeObj.id,
+        availableMaterialLength: sufficientMaterials.length,
+        emptyMaterialLength: emptyMaterials.length,
+        sufficientMaterials,
+        emptyMaterials,
       },
     });
   },
