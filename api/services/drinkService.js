@@ -47,7 +47,10 @@ module.exports = {
       { role: "user", content: prompts.prompt },
     ]);
 
-    if (result.ingredients.includes("null")) {
+    if (
+      result.ingredients.includes("null") ||
+      result.ingredients.includes("undefined")
+    ) {
       return null;
     }
 
