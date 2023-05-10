@@ -55,9 +55,9 @@ module.exports = {
         data: {
           hasRecipe,
           recipe: false,
-          availableMaterialLength: 0,
+          sufficientMaterialLength: 0,
           emptyMaterialLength: 0,
-          availableMaterials: [],
+          sufficientMaterials: [],
           emptyMaterials: [],
         },
       });
@@ -75,7 +75,7 @@ module.exports = {
       data: {
         hasRecipe,
         recipe: recipeObj.id,
-        availableMaterialLength: sufficientMaterials.length,
+        sufficientMaterialLength: sufficientMaterials.length,
         emptyMaterialLength: emptyMaterials.length,
         sufficientMaterials,
         emptyMaterials,
