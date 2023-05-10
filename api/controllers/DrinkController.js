@@ -57,8 +57,6 @@ module.exports = {
           recipe: false,
           sufficientMaterialLength: 0,
           emptyMaterialLength: 0,
-          sufficientMaterials: [],
-          emptyMaterials: [],
         },
       });
     }
@@ -77,8 +75,6 @@ module.exports = {
         recipe: recipeObj.id,
         sufficientMaterialLength: sufficientMaterials.length,
         emptyMaterialLength: emptyMaterials.length,
-        sufficientMaterials,
-        emptyMaterials,
       },
     });
   },
